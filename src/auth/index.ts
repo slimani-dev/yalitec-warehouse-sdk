@@ -1,0 +1,81 @@
+import {OAuth2Client, OAuth2Fetch} from '@badgateway/oauth2-client';
+import {clientPasswordParams, clientSettings} from '../config/auth';
+import {Response} from "../types/Response";
+import {OAuth2Token} from "@badgateway/oauth2-client/src/token";
+
+const client = new OAuth2Client(clientSettings);
+let refreshTimer: NodeJS.Timeout | null = null;
+
+const MAX_INT32 = 2147483647;
+
+
+export const useFetch = (
+    storeTokenCallback: (token: OAuth2Token) => void,
+    getStoredTokenCallback: () => OAuth2Token | null
+) => {
+
+    const fetchWrapper = new OAuth2Fetch({
+        client,
+        scheduleRefresh: false,
+        getNewToken: async () => {
+            return client.password(clientPasswordParams)
+        },
+        onError: (err) => {
+            console.log("error : ", err.message)
+        },
+        storeToken: (token) => {
+            storeTokenCallback(token)
+        },
+        getStoredToken: () => {
+            return getStoredTokenCallback();
+        }
+    });
+
+    const scheduleRefresh = (token: OAuth2Token) => {
+
+        if (refreshTimer) {
+            clearTimeout(refreshTimer);
+            refreshTimer = null;
+        }
+
+        if (!token?.expiresAt || !token.refreshToken) {
+            // If we don't know when the token expires, or don't have a refresh_token, don't bother.
+            return;
+        }
+
+        const expiresIn = token.expiresAt - Date.now();
+
+        // We only schedule this event if it happens more than 2 minutes in the future.
+        if (expiresIn < 120 * 1000) {
+            return;
+        }
+
+        // Schedule 1 minute before expiry
+        const ms = 3000 // Math.min(expiresIn - 60 * 1000, MAX_INT32 - 1);
+
+        refreshTimer = setTimeout(async () => {
+            try {
+                fetchWrapper.refreshToken().then();
+            } catch (err) {
+                // eslint-disable-next-line no-console
+                console.error('[fetch-mw-oauth2] error while doing a background OAuth2 auto-refresh', err);
+            }
+        }, ms);
+
+    }
+
+    const fetch = async <T>(endpoint: string) => {
+        const response = await fetchWrapper.fetch(endpoint)
+
+        if (!response.ok) {
+            throw new Error(response.statusText)
+        } else {
+            return await response.json() as Promise<Response<T>>;
+        }
+    };
+
+    return {
+        fetch,
+        scheduleRefresh
+    }
+}
