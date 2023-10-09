@@ -1,4 +1,4 @@
-import {Warehouse as WarehouseType} from '../types/Warehouse'
+import {Warehouse} from '../types/Warehouse'
 import {endpoints} from "../config/server";
 import {Response} from "../types/Response";
 
@@ -10,6 +10,6 @@ export default class WarehouseDataSource {
     }
 
     async all() {
-        return await this.fetch<WarehouseType>(endpoints.warehouses.index);
+        return await this.fetch<Warehouse>(endpoints.warehouses.index);
     }
 }

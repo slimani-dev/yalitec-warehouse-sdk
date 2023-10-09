@@ -2,12 +2,12 @@ import {OAuth2Client, OAuth2Fetch} from '@badgateway/oauth2-client';
 import {clientPasswordParams, clientSettings} from '../config/auth';
 import {Response} from "../types/Response";
 import {OAuth2Token} from "@badgateway/oauth2-client/src/token";
+import {FetchOptions} from "../types/global";
 
 const client = new OAuth2Client(clientSettings);
 let refreshTimer: NodeJS.Timeout | null = null;
 
 const MAX_INT32 = 2147483647;
-
 
 export const useFetch = (
     storeTokenCallback: (token: OAuth2Token) => void,
@@ -51,7 +51,7 @@ export const useFetch = (
         }
 
         // Schedule 1 minute before expiry
-        const ms = 3000 // Math.min(expiresIn - 60 * 1000, MAX_INT32 - 1);
+        const ms = Math.min(expiresIn - 60 * 1000, MAX_INT32 - 1);
 
         refreshTimer = setTimeout(async () => {
             try {
@@ -64,8 +64,15 @@ export const useFetch = (
 
     }
 
-    const fetch = async <T>(endpoint: string) => {
-        const response = await fetchWrapper.fetch(endpoint)
+    const fetch = async <T>(endpoint: string, options?: FetchOptions) => {
+        const response = await fetchWrapper.fetch(endpoint, {
+            ...options,
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            redirect: 'follow'
+        })
 
         if (!response.ok) {
             throw new Error(response.statusText)

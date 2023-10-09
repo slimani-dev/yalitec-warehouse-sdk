@@ -5,7 +5,7 @@
   "author": "Mohamed Slimani",
   "license": "MIT",
   "scripts": {
-    "commander": "node -r ts-node/register src/commander.ts"
+    "commander": "node -r ts-node/register src/commands/index.ts"
   },
   "dependencies": {
     "@badgateway/oauth2-client": "^2.2.4",

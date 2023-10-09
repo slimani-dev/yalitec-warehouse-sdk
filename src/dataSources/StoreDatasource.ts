@@ -1,11 +1,12 @@
-import {Store as StoreType} from '../types/Store'
+import {Store, StoreCreateInput, StoreUpdateInput} from '../types/Store'
 import {endpoints} from "../config/server";
 import {Response} from "../types/Response";
+import {FetchOptions} from "../types/global";
 
 export default class StoreDatasource {
-    private readonly fetch: <T>(endpoint: string) => Promise<Response<T>>;
+    private readonly fetch: <T>(endpoint: string, options?: FetchOptions) => Promise<Response<T>>;
 
-    constructor(fetch: <T>(endpoint: string) => Promise<Response<T>>) {
+    constructor(fetch: <T>(endpoint: string, options?: FetchOptions) => Promise<Response<T>>) {
         this.fetch = fetch;
     }
 
@@ -27,8 +28,24 @@ export default class StoreDatasource {
             endpoint += '?' + urlSearchParams;
         }
 
-        console.log('endpoint', endpoint)
+        return await this.fetch<Store>(endpoint);
+    }
 
-        return await this.fetch<StoreType>(endpoint);
+    async find(id: number) {
+        return await this.fetch<Store>(endpoints.stores.show(id));
+    }
+
+    async create(input: StoreCreateInput) {
+        return await this.fetch<Store>(endpoints.stores.create, {
+            method: 'POST',
+            body: JSON.stringify(input)
+        });
+    }
+
+    async update(id: number, input: StoreUpdateInput) {
+        return await this.fetch<Store>(endpoints.stores.update(id), {
+            method: 'PUT',
+            body: JSON.stringify(input)
+        });
     }
 }

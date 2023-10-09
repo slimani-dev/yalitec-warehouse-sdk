@@ -7,7 +7,10 @@ export const endpoints = {
         index: `${hostname}/api/warehouses`
     },
     stores: {
-        index: `${hostname}/api/stores`
+        index: `${hostname}/api/stores`,
+        show: (id: number) => `${hostname}/api/stores/${id}`,
+        create: `${hostname}/api/stores`,
+        update: (id: number) => `${hostname}/api/stores/${id}`
     }
 }
 
