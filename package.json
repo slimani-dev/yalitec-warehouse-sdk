@@ -1,6 +1,6 @@
 {
   "name": "yalidine-warehouse-sdk",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Mohamed Slimani",
   "license": "MIT",
   "main": "dist/index.js",
@@ -18,10 +18,10 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "ts-node": "^10.9.1",
-    "commander": "^11.0.0",
     "@commander-js/extra-typings": "^11.0.0",
     "@inquirer/prompts": "^3.2.0",
-    "loading-cli": "^1.1.0"
+    "commander": "^11.0.0",
+    "loading-cli": "^1.1.0",
+    "ts-node": "^10.9.1"
   }
 }
