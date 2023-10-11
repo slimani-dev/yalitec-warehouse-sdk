@@ -1,22 +1,35 @@
 import {OAuth2Client, OAuth2Fetch} from '@badgateway/oauth2-client';
-import {clientPasswordParams, clientSettings} from '../config/auth';
 import {Response} from "../types/Response";
 import {OAuth2Token} from "@badgateway/oauth2-client/src/token";
-import {FetchOptions} from "../types/global";
+import {ClientPasswordParams, FetchOptions} from "../types/global";
+import {ClientSettings} from "@badgateway/oauth2-client/dist/client";
 
-const client = new OAuth2Client(clientSettings);
 let refreshTimer: NodeJS.Timeout | null = null;
 
 const MAX_INT32 = 2147483647;
 
 export const useFetch = (
-    storeTokenCallback: (token: OAuth2Token) => void,
-    getStoredTokenCallback: () => OAuth2Token | null,
-    loader?: {
-        start: () => void,
-        stop: () => void
+    config: {
+        clientSettings: ClientSettings,
+        clientPasswordParams: ClientPasswordParams,
+        storeTokenCallback: (token: OAuth2Token) => void,
+        getStoredTokenCallback: () => OAuth2Token | null,
+        loader?: {
+            start: () => void,
+            stop: () => void
+        }
     }
 ) => {
+
+    const {
+        clientSettings,
+        clientPasswordParams,
+        storeTokenCallback,
+        getStoredTokenCallback,
+        loader
+    } = config
+
+    const client = new OAuth2Client(clientSettings);
 
     const fetchWrapper = new OAuth2Fetch({
         client,

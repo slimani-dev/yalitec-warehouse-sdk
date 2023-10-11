@@ -1,6 +1,7 @@
 import 'dotenv/config'
 
 import {ClientSettings} from "@badgateway/oauth2-client/dist/client";
+import {ClientPasswordParams} from "../types/global";
 
 export const clientSettings: ClientSettings = {
     server: process.env.YALITEC_WAREHOUSE_API_SERVER_HOSTNAME || "https://beta-api.slimani.dev",
@@ -9,7 +10,7 @@ export const clientSettings: ClientSettings = {
     tokenEndpoint: "/oauth/token",
 };
 
-export const clientPasswordParams: { username: string; password: string; scope?: string[] } = {
+export const clientPasswordParams: ClientPasswordParams = {
     username: process.env.YALITEC_WAREHOUSE_API_CLIENT_USERNAME || "admin",
     password: process.env.YALITEC_WAREHOUSE_API_CLIENT_PASSWORD || "password",
 }
