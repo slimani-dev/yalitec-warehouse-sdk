@@ -13,17 +13,17 @@
     "@badgateway/oauth2-client": "^2.2.4",
     "@types/node": "^20.8.3",
     "dotenv": "^16.3.1",
-    "typescript": "^5.2.2"
-  },
-  "devDependencies": {
+    "typescript": "^5.2.2",
     "@commander-js/extra-typings": "^11.0.0",
     "@inquirer/prompts": "^3.2.0",
     "commander": "^11.0.0",
-    "loading-cli": "^1.1.0",
+    "loading-cli": "^1.1.0"
+  },
+  "devDependencies": {
     "ts-node": "^10.9.1"
   },
   "bin": {
-    "warehouse": "./dist/commands/index.js"
+    "warehouse": "node ./dist/commands/index.js"
   },
   "files": [
     "/dist"
