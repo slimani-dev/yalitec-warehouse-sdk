@@ -1,6 +1,6 @@
 {
   "name": "yalitec-warehouse-sdk",
-  "version": "0.0.8-beta",
+  "version": "0.0.9",
   "author": "Mohamed Slimani",
   "license": "MIT",
   "main": "dist/index.js",
