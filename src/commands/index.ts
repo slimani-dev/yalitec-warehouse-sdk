@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+
 import {Command} from "@commander-js/extra-typings";
 import {WarehouseDataSource, useFetch, OAuth2Token} from "../index";
 import StoreDataSource from "../dataSources/StoreDataSource";
@@ -7,8 +10,9 @@ import ProductDataSource from "../dataSources/ProductDataSource";
 import {useProductsCommand} from "./products";
 import loading from "loading-cli";
 import 'dotenv/config'
-
 import {clientPasswordParams, clientSettings} from '../config/auth';
+
+import * as pack from "../../package.json"
 
 const {fetch, scheduleRefresh} = useFetch({
     clientSettings,
@@ -41,7 +45,7 @@ const productCommand = useProductsCommand(productDataSource, storeDataSource)
 const program = new Command();
 
 program.description('CLI to use the Warehouse api')
-    .version('1.0.0')
+    .version(pack.version)
     .addCommand(warehouseCommand)
     .addCommand(storeCommand)
     .addCommand(productCommand)
