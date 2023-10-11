@@ -1,8 +1,7 @@
 export interface Response<T> {
-    data: T[] | T;
-    errors?: Array<{ message: string }>
-    links: Links
-    meta: Meta
+    data: T;
+    links?: Links
+    meta?: Meta
 }
 
 export interface Links {

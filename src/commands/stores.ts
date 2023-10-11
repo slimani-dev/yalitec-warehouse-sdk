@@ -1,5 +1,8 @@
 import {Argument, Command, Option} from "@commander-js/extra-typings";
-import StoreDataSource from "../dataSources/StoreDatasource";
+import StoreDataSource from "../dataSources/StoreDataSource";
+import {input} from "@inquirer/prompts";
+import {Store, StoreCreateInput, StoreUpdateInput} from "../types/Store";
+import {Response} from "../types/Response";
 
 const page = new Option('-p, --page <page>', 'show specific page').argParser(parseInt);
 /**
@@ -29,7 +32,7 @@ export const useStoresCommand = (storeDataSource: StoreDataSource) => {
         .addOption(sellerId)
         .action(async (options) => {
             console.log('Getting a list of stores')
-            const stores = await storeDataSource.all(options.sellerId, options.page)
+            const stores = await storeDataSource.list(options.sellerId, options.page)
             console.log('stores : ', stores)
         });
 
@@ -43,59 +46,70 @@ export const useStoresCommand = (storeDataSource: StoreDataSource) => {
 
     const create = new Command('create')
         .description('Create a new store')
-        .addOption(sellerId)
-        .addOption(name)
-        .addOption(phone)
-        .addOption(description)
-        .addOption(stateId)
-        .addOption(cityId)
         .action(async (options) => {
 
-            // make sur the required options are passed
-            if (!options.sellerId) {
-                throw new Error('Missing sellerId')
-            }
-            if (!options.name) {
-                throw new Error('Missing name')
-            }
 
-            if (!options.phone) {
-                throw new Error('Missing phone')
-            }
+            let storeCreateInput: StoreCreateInput = {
+                seller_id: await input({message: 'Seller id :', validate: value => !!value}),
+                name: await input({message: 'Name :', validate: value => !!value}),
+                phone: await input({message: 'Phone :', validate: value => !!value}),
+                description: await input({message: 'Description (optional):'}),
+            };
 
             console.log('Creating a store')
-
-            const store = await storeDataSource.create({
-                seller_id: options.sellerId,
-                name: options.name,
-                phone: options.phone,
-                description: options.description,
-                state_id: options.stateId,
-                city_id: options.cityId
-            })
+            const store = await storeDataSource.create(storeCreateInput)
             console.log('store : ', store)
         })
 
     const update = new Command('update')
         .description('Update an existing store')
         .addArgument(id)
-        .addOption(sellerId)
-        .addOption(name)
-        .addOption(phone)
-        .addOption(description)
-        .addOption(stateId)
-        .addOption(cityId)
         .action(async (id, options) => {
+            let store: Response<Store> | null = null;
+
+            try {
+                store = await storeDataSource.find(id);
+            } catch (e) {
+                console.log('Store not found ⛔, try again')
+            }
+
+            while ((!store?.data)) {
+                const store_id = await input({message: 'Store id :', validate: value => /^-?\d+$/.test(value)})
+                try {
+                    store = await storeDataSource.find(parseInt(store_id))
+                } catch (e) {
+                    console.log('Store not found ⛔, try again')
+                }
+
+            }
+
+            console.log('Store Found, store name : ', store.data.name)
+
+            let storeUpdateInput: StoreUpdateInput = {
+                seller_id: await input({
+                    message: 'Seller id :',
+                    default: store.data.seller_id,
+                    validate: value => !!value
+                }),
+                name: await input({
+                    message: 'Name :',
+                    default: store.data.name,
+                    validate: value => !!value
+                }),
+                phone: await input({
+                    message: 'Phone :',
+                    default: store.data.phone,
+                    validate: value => !!value
+                }),
+                description: await input({
+                    message: 'Description (optional):',
+                    default: store.data.description
+                }),
+            }
+
             console.log('Updating a store')
 
-            const store = await storeDataSource.update(id, {
-                seller_id: options.sellerId,
-                name: options.name,
-                phone: options.phone,
-                description: options.description,
-                state_id: options.stateId,
-                city_id: options.cityId
-            })
+            store = await storeDataSource.update(store.data.id, storeUpdateInput)
             console.log('store : ', store)
         })
 

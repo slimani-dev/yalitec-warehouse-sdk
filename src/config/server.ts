@@ -11,6 +11,12 @@ export const endpoints = {
         show: (id: number) => `${hostname}/api/stores/${id}`,
         create: `${hostname}/api/stores`,
         update: (id: number) => `${hostname}/api/stores/${id}`
+    },
+    products: {
+        index: `${hostname}/api/products`,
+        show: (sku: string) => `${hostname}/api/products/${sku}`,
+        create: `${hostname}/api/products`,
+        update: (sku: string) => `${hostname}/api/products/${sku}`
     }
 }
 

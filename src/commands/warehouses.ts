@@ -8,7 +8,7 @@ export const useWarehousesCommand = (warehouseDataSource: WarehouseDataSource) =
     const list = new Command('list')
         .action(async (list, options) => {
             console.log('Getting a list of warehouses')
-            const warehouses = await warehouseDataSource.all()
+            const warehouses = await warehouseDataSource.list()
             console.log('warehouses : ', warehouses)
         });
 

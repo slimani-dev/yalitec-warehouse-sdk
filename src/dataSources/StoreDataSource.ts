@@ -2,15 +2,11 @@ import {Store, StoreCreateInput, StoreUpdateInput} from '../types/Store'
 import {endpoints} from "../config/server";
 import {Response} from "../types/Response";
 import {FetchOptions} from "../types/global";
+import DataSource from "./DataSource";
 
-export default class StoreDatasource {
-    private readonly fetch: <T>(endpoint: string, options?: FetchOptions) => Promise<Response<T>>;
+export default class StoreDataSource extends DataSource {
 
-    constructor(fetch: <T>(endpoint: string, options?: FetchOptions) => Promise<Response<T>>) {
-        this.fetch = fetch;
-    }
-
-    async all(seller_id?: string, page?: number) {
+    async list(seller_id?: string, page?: number) {
 
 
         let endpoint = endpoints.stores.index;
@@ -28,7 +24,7 @@ export default class StoreDatasource {
             endpoint += '?' + urlSearchParams;
         }
 
-        return await this.fetch<Store>(endpoint);
+        return await this.fetch<Store[]>(endpoint);
     }
 
     async find(id: number) {

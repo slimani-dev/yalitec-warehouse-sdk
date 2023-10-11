@@ -11,7 +11,11 @@ const MAX_INT32 = 2147483647;
 
 export const useFetch = (
     storeTokenCallback: (token: OAuth2Token) => void,
-    getStoredTokenCallback: () => OAuth2Token | null
+    getStoredTokenCallback: () => OAuth2Token | null,
+    loader?: {
+        start: () => void,
+        stop: () => void
+    }
 ) => {
 
     const fetchWrapper = new OAuth2Fetch({
@@ -65,6 +69,9 @@ export const useFetch = (
     }
 
     const fetch = async <T>(endpoint: string, options?: FetchOptions) => {
+
+        loader?.start()
+
         const response = await fetchWrapper.fetch(endpoint, {
             ...options,
             headers: {
@@ -74,8 +81,11 @@ export const useFetch = (
             redirect: 'follow'
         })
 
+        loader?.stop()
+
         if (!response.ok) {
-            throw new Error(response.statusText)
+            let message = await response.text();
+            throw new Error(message)
         } else {
             return await response.json() as Promise<Response<T>>;
         }

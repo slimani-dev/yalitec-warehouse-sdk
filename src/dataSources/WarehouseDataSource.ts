@@ -1,15 +1,10 @@
 import {Warehouse} from '../types/Warehouse'
 import {endpoints} from "../config/server";
-import {Response} from "../types/Response";
+import DataSource from "./DataSource";
 
-export default class WarehouseDataSource {
-    private readonly fetch: <T>(endpoint: string) => Promise<Response<T>>;
+export default class WarehouseDataSource extends DataSource {
 
-    constructor(fetch: <T>(endpoint: string) => Promise<Response<T>>) {
-        this.fetch = fetch;
-    }
-
-    async all() {
-        return await this.fetch<Warehouse>(endpoints.warehouses.index);
+    async list() {
+        return await this.fetch<Warehouse[]>(endpoints.warehouses.index);
     }
 }
