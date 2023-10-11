@@ -1,6 +1,6 @@
 {
   "name": "yalitec-warehouse-sdk",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Mohamed Slimani",
   "license": "MIT",
   "main": "dist/index.js",
@@ -23,7 +23,7 @@
     "ts-node": "^10.9.1"
   },
   "bin": {
-    "warehouse": "./dist/commands/index.js"
+    "warehouse": "./src/commands/index.js"
   },
   "files": [
     "/dist"
