@@ -26,7 +26,7 @@ export interface Product {
     variants: Product[]
 }
 
-interface ProductsFilter {
+export interface ProductsFilter {
     page?: number;
     sellerId?: string;
     sellerIds?: string[];

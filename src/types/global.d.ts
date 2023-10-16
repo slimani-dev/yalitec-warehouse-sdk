@@ -8,3 +8,20 @@ export interface ClientPasswordParams {
     password: string;
     scope?: string[]
 }
+
+export interface City {
+    id: number
+    name: string
+    state_id: number
+    stop_desk?: boolean,
+    created_at?: any;
+    updated_at?: any;
+}
+
+export interface State {
+    id: number
+    name: string
+    zone?: number
+    created_at?: any;
+    updated_at?: any;
+}

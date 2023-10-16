@@ -1,6 +1,6 @@
 import {Argument, Command, Option} from "@commander-js/extra-typings";
 import ProductDataSource from "../dataSources/ProductDataSource";
-import {input, select, confirm, Separator} from '@inquirer/prompts';
+import {input, select, confirm} from '@inquirer/prompts';
 import StoreDataSource from "../dataSources/StoreDataSource";
 import {Store} from "../types/Store";
 import {Response} from "../types/Response";
@@ -11,7 +11,6 @@ import {
     ProductsVariantUpdateInput,
     ProductUpdateInput
 } from "../types/Product";
-
 
 const page = new Option('-p, --page <page>', 'show specific page').argParser(parseInt);
 const sellerId = new Option('-s, --sellerId <sellerId>', 'The Seller Id Of the Products')
@@ -83,11 +82,17 @@ export const useProductsCommand = (productDataSource: ProductDataSource, storeDa
                 name: await input({message: 'Name :', validate: value => !!value}),
                 sku: await input({message: 'SKU :', validate: value => !!value}),
                 category: await input({message: 'Category (optional):'}),
-                size: await select({message: 'Size :', choices: [{value: 'small'}, {value: 'medium'}, {value: 'large'}, {value: 'huge'}]}),
+                size: await select({
+                    message: 'Size :',
+                    choices: [{value: 'small'}, {value: 'medium'}, {value: 'large'}, {value: 'huge'}]
+                }),
                 description: await input({message: 'Description (optional):'}),
                 value: parseInt(await input({message: 'Value :', validate: value => /^-?\d+$/.test(value)})),
                 variant: await input({message: 'Variant (optional):'}),
-                variant_of: await input({message: 'variant_of (SKU) (optional):', validate: value => value === '' || /^-?\d+$/.test(value)}),
+                variant_of: await input({
+                    message: 'variant_of (SKU) (optional):',
+                    validate: value => value === '' || /^-?\d+$/.test(value)
+                }),
             }
 
             let addVariants = await getAddVariants()
@@ -134,7 +139,7 @@ export const useProductsCommand = (productDataSource: ProductDataSource, storeDa
                 console.log('Product not found ⛔, try again')
             }
 
-            while ((!product?.data)) {
+            while (!product?.data) {
                 const sku = await input({message: 'SKU :', validate: value => !!value})
 
                 try {
