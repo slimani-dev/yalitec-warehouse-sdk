@@ -1,6 +1,5 @@
-import {endpoints} from "../config/server";
 import DataSource from "./DataSource";
-import {Product, ProductCreateInput, ProductsFilter, ProductUpdateInput} from "../types/Product";
+import {Product, ProductCreateInput, ProductsFilter, ProductUpdateInput} from "../types";
 
 export default class ProductDataSource extends DataSource {
     async list(options: ProductsFilter) {
@@ -17,7 +16,7 @@ export default class ProductDataSource extends DataSource {
         } = options;
 
 
-        let endpoint = endpoints.products.index;
+        let endpoint = this.endpoints.products.index;
         let urlSearchParams = new URLSearchParams();
 
 
@@ -57,18 +56,18 @@ export default class ProductDataSource extends DataSource {
     }
 
     async find(sku: string) {
-        return await this.fetch<Product>(endpoints.products.show(sku));
+        return await this.fetch<Product>(this.endpoints.products.show(sku));
     }
 
     async create(input: ProductCreateInput) {
-        return await this.fetch<Product>(endpoints.products.create, {
+        return await this.fetch<Product>(this.endpoints.products.create, {
             method: 'POST',
             body: JSON.stringify(input)
         });
     }
 
     async update(sku: string, input: ProductUpdateInput) {
-        return await this.fetch<Product>(endpoints.products.update(sku), {
+        return await this.fetch<Product>(this.endpoints.products.update(sku), {
             method: 'PUT',
             body: JSON.stringify(input)
         });

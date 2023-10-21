@@ -1,8 +1,5 @@
 import {OAuth2Client, OAuth2Fetch} from '@badgateway/oauth2-client';
-import {Response} from "../types/Response";
-import {OAuth2Token} from "@badgateway/oauth2-client/src/token";
-import {ClientPasswordParams, FetchOptions} from "../types/global";
-import {ClientSettings} from "@badgateway/oauth2-client/dist/client";
+import {ClientPasswordParams, FetchOptions, ClientSettings, OAuth2Token, Response} from "../types";
 
 let refreshTimer: NodeJS.Timeout | null = null;
 

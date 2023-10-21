@@ -1,8 +1,8 @@
 import DataSource from "./DataSource";
-import {Inbound, InboundCreateInput, InboundsFilter, InboundUpdateInput} from "../types";
+import {Outbound, OutboundsFilter, OutboundCreateInput, OutboundUpdateInput} from "../types";
 
-export default class InboundDataSource extends DataSource {
-    async list(options: InboundsFilter) {
+export default class OutboundDataSource extends DataSource {
+    async list(options: OutboundsFilter) {
         // distrust the options
 
         const {
@@ -10,11 +10,14 @@ export default class InboundDataSource extends DataSource {
             sellerId,
             sellerIds,
             storeId,
-            storeIds
+            storeIds,
+            status,
+            sku,
+            skus
         } = options;
 
 
-        let endpoint = this.endpoints.inbounds.index;
+        let endpoint = this.endpoints.outbounds.index;
         let urlSearchParams = new URLSearchParams();
 
         if (storeId) {
@@ -33,6 +36,20 @@ export default class InboundDataSource extends DataSource {
             sellerIds.forEach(sellerId => urlSearchParams.append('seller_ids[]', sellerId))
         }
 
+        if (status) {
+            urlSearchParams.append('status', status)
+        }
+
+
+        if (sku) {
+            urlSearchParams.append('sku', sku)
+        }
+
+
+        if (skus) {
+            skus.forEach(sku => urlSearchParams.append('skus[]', sku))
+        }
+
         if (page) {
             urlSearchParams.append('page', page.toString())
         }
@@ -41,29 +58,29 @@ export default class InboundDataSource extends DataSource {
             endpoint += '?' + urlSearchParams;
         }
 
-        return await this.fetch<Inbound[]>(endpoint);
+        return await this.fetch<Outbound[]>(endpoint);
     }
 
     async find(number: string) {
-        return await this.fetch<Inbound>(this.endpoints.inbounds.show(number));
+        return await this.fetch<Outbound>(this.endpoints.outbounds.show(number));
     }
 
-    async create(input: InboundCreateInput) {
-        return await this.fetch<Inbound>(this.endpoints.inbounds.create, {
+    async create(input: OutboundCreateInput) {
+        return await this.fetch<Outbound>(this.endpoints.outbounds.create, {
             method: 'POST',
             body: JSON.stringify(input)
         });
     }
 
-    async update(number: string, input: InboundUpdateInput) {
-        return await this.fetch<Inbound>(this.endpoints.inbounds.update(number), {
+    async update(number: string, input: OutboundUpdateInput) {
+        return await this.fetch<Outbound>(this.endpoints.outbounds.update(number), {
             method: 'PUT',
             body: JSON.stringify(input)
         });
     }
 
     async delete(number: string) {
-        return await this.fetch<Inbound>(this.endpoints.inbounds.delete(number), {
+        return await this.fetch<Outbound>(this.endpoints.outbounds.delete(number), {
             method: 'DELETE',
         });
     }

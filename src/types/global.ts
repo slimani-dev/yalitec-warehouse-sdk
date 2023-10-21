@@ -25,3 +25,13 @@ export interface State {
     created_at?: any;
     updated_at?: any;
 }
+
+export interface Endpoints {
+    [key: string]: {
+        index: string,
+        create: string,
+        show(id: (number | string)): string,
+        update(id: (number | string)): string,
+        delete(id: (number | string)): string
+    }
+}

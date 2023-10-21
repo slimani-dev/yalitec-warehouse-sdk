@@ -1,5 +1,17 @@
 import WarehouseDataSource from './dataSources/WarehouseDataSource';
+import StoreDataSource from "./dataSources/StoreDataSource";
+import ProductDataSource from "./dataSources/ProductDataSource";
+import InboundDataSource from "./dataSources/InboundDataSource";
+import OutboundDataSource from "./dataSources/OutboundDataSource";
 import {useFetch} from "./auth";
-import {OAuth2Token} from '@badgateway/oauth2-client';
+import {useConfig} from "./config";
 
-export {WarehouseDataSource, useFetch, OAuth2Token}
+export {
+    WarehouseDataSource,
+    StoreDataSource,
+    ProductDataSource,
+    InboundDataSource,
+    OutboundDataSource,
+    useFetch,
+    useConfig,
+}
