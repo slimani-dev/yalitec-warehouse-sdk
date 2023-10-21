@@ -1,6 +1,6 @@
 {
   "name": "yalitec-warehouse-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Mohamed Slimani",
   "license": "MIT",
   "main": "src/index.ts",
@@ -15,7 +15,7 @@
     "ts-node": "^10.9.1"
   },
   "files": [
-    "/dist"
+    "/src"
   ],
   "repository": {
     "url": "https://github.com/moh-slimani/yalitec-warehouse-sdk"
