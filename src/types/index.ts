@@ -12,8 +12,6 @@ import {
     OutboundsFilter,
     OutboundUpdateInput
 } from "./outbound";
-
-
 import {
     Product,
     ProductCreateInput,

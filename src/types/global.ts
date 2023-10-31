@@ -32,6 +32,7 @@ export interface Endpoints {
         create: string,
         show(id: (number | string)): string,
         update(id: (number | string)): string,
-        delete(id: (number | string)): string
+        updateStatus?(id: (number | string)): string,
+        delete(id: (number | string)): string,
     }
 }

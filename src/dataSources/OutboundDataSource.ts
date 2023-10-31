@@ -79,6 +79,14 @@ export default class OutboundDataSource extends DataSource {
         });
     }
 
+    async updateStatus(number: string, status: 'completed' | 'incoming_return') {
+        if (this.endpoints.outbounds.updateStatus)
+            return await this.fetch<Outbound>(this.endpoints.outbounds.updateStatus(number), {
+                method: 'PUT',
+                body: JSON.stringify({status})
+            });
+    }
+
     async delete(number: string) {
         return await this.fetch<Outbound>(this.endpoints.outbounds.delete(number), {
             method: 'DELETE',

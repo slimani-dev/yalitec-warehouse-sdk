@@ -35,6 +35,7 @@ export const getEndpoints = (server: string): Endpoints => {
             create: `${server}/api/outbounds`,
             show: (number: string) => `${server}/api/outbounds/${number}`,
             update: (number: string) => `${server}/api/outbounds/${number}`,
+            updateStatus: (number: string) => `${server}/api/outbounds/${number}/status`,
             delete: (number: string) => `${server}/api/outbounds/${number}`
         }
     };
