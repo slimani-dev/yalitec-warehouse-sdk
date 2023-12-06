@@ -17,8 +17,8 @@ export const useConfig = (
         clientId = "2",
         clientSecret,
         tokenEndpoint = "/oauth/token",
-        password = "admin",
-        username = "password"
+        password,
+        username
     } = config
 
     const clientSettings: ClientSettings = {
